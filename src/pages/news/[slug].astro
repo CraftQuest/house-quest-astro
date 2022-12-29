@@ -21,19 +21,8 @@ let singleArticleQuery = `
   }
 }
    `
-// let response = await fetch("http://localhost:8888/api", {
-//   method: "POST",
-//   headers: {
-//     "Content-Type": "application/json",
-//   },
-//   body: JSON.stringify({
-//     query: ,
-//   }),
-// });
 
-// let articleResponse = await response.json();
-// let article = articleResponse.data.entry;
-let article = await getEntry(singleArticleQuery, 'http://localhost:8888/api');
+let article = await getEntry(singleArticleQuery);
 
 export async function getStaticPaths() {
   let allArticlesQuery = `
@@ -50,32 +39,7 @@ export async function getStaticPaths() {
   }
 }
   `
-  let articles = await getEntries(allArticlesQuery, 'http://localhost:8888/api');
-//   let response = await fetch("http://localhost:8888/api", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       query: `
-//         {
-//   entries(sectionId: 12) {
-//     id
-//     title
-//     slug
-//     postDate
-//     ... on marketNews_default_Entry {
-//       summaryText
-//       richText
-//     }
-//   }
-// }
-//         `,
-//     }),
-//   });
-
-//   let articlesResponse = await response.json();
-//   let articles = articlesResponse.data.entries;
+  let articles = await getEntries(allArticlesQuery);
   return articles.map((article) => {
     return {
       params: { slug: article.slug },
