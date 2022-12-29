@@ -8,6 +8,6 @@ import tailwindTypography from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
-  site: ''
+  site: 'https://housequest-astro.learncraftcms.com',
   integrations: [tailwind(), tailwindTypography()]
 });
