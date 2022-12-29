@@ -1,0 +1,18 @@
+---
+export interface Props {
+		title: string;
+		summary?: string;
+		postDate?: string;
+		fullText?: string;
+        slug: string;
+        isEntry?: boolean;
+}
+
+const { title, summary, pubDate, fullText, postDate, slug, isEntry } = Astro.props;
+---
+<article  class="border-b border-gray-300 pb-8">
+    {isEntry ? <h1>{title}</h1> : <h2><a href={'/news/' + slug}>{title}</a></h2>}
+    <p>{postDate}</p>
+    {isEntry ? <div set:html={fullText}></div> : <p>{summary}</p>}
+    {!isEntry && <a href={'/news/' + slug} class="py-4 px-3 bg-black text-white">Read more</a>}
+</article>

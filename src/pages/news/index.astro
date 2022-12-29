@@ -1,0 +1,40 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import InteriorHeader from "../../components/InteriorHeader.astro";
+import NewsArticle from "../../components/NewsArticle.astro";
+
+import { getEntries } from "../../components/EntriesFetch.astro";
+
+let query = `{
+  entries(sectionId: 12, limit: 10) {
+    id
+    title
+    slug
+    postDate
+    ... on marketNews_default_Entry {
+      summaryText
+      richText
+    }
+  }
+}`
+
+let newsArticles = await getEntries(query, 'http://localhost:8888/api');
+---
+
+<Layout>
+    <InteriorHeader />
+    <div class="bg-white">
+        <div class="relative py-16 bg-tertiary overflow-hidden">
+            <div class="relative px-4 sm:px-6 lg:px-8">
+                <div
+                    class="mt-6 prose prose-indigo prose-lg text-gray-500 mx-auto"
+                >
+                    <h1>Market News</h1>
+                        {newsArticles.map((article) => {
+                            return <NewsArticle title={article.title} summary={article.summaryText} slug={article.slug} postDate={article.postDate} fullText={article.richText} />
+                        })}
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>

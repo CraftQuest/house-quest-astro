@@ -1,0 +1,49 @@
+---
+import Layout from '../layouts/Layout.astro'
+import MarketNews from '../components/MarketNews.astro'
+import { getEntry } from "../components/EntryFetch.astro";
+let query = `
+{
+  entry(section: "homepage") {
+    title
+    id
+    ... on homepage_homepage_Entry {
+      richText
+    }
+  }
+}
+`
+let homepageContent = await getEntry(query, 'http://localhost:8888/api');
+
+---
+
+<Layout title="Welcome to Home Quest" description="In a competitive market, Olivia is the experienced real estate agent you want on your side.">
+	<div class="bg-white">
+		<div class="max-w-full mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8 bg-primary shadow-2xl shadow-secondary border-opacity-50 border-b-8 border-secondary">
+		  <div class="text-center">
+			<img
+			  class="mx-auto h-40 w-40 rounded-full xl:w-56 xl:h-56 shadow-xl shadow-gray-500"
+			  src="/images/omar-lopez-Gx5-zf_HE9w-unsplash.jpg"
+			  alt=""
+			/>
+			<p
+			  class="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl"
+			>
+			  Olivia Lopez, CRS         
+			</p>
+			<p class="max-w-xl mt-5 mx-auto text-xl text-gray-800">
+			  In a competitive market, Olivia is the <strong>experienced real estate agent</strong> you want
+			  on your side.
+			</p>
+		  </div>
+		</div>
+		<div class="relative py-16 bg-tertiary overflow-hidden">
+		  <div class="relative px-4 sm:px-6 lg:px-8">
+			<div class="mt-6 prose prose-indigo prose-lg text-gray-500 mx-auto">
+			  <div set:html={homepageContent.richText}>				
+			</div>
+		  </div>
+		</div>
+	  </div>
+	<MarketNews/>
+</Layout>

@@ -1,0 +1,102 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ArticleWrapper from "../../layouts/ArticleWrapper.astro";
+import InteriorHeader from "../../components/InteriorHeader.astro";
+import NewsArticle from "../../components/NewsArticle.astro";
+
+import { getEntries } from "../../components/EntriesFetch.astro";
+import { getEntry } from "../../components/EntryFetch.astro";
+
+const { slug } = Astro.params;
+let singleArticleQuery = `
+        {
+  entry(sectionId: 12, slug: "${slug}") {
+    id
+    title
+    slug
+    ... on marketNews_default_Entry {
+      summaryText
+      richText
+    }
+  }
+}
+   `
+// let response = await fetch("http://localhost:8888/api", {
+//   method: "POST",
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+//   body: JSON.stringify({
+//     query: ,
+//   }),
+// });
+
+// let articleResponse = await response.json();
+// let article = articleResponse.data.entry;
+let article = await getEntry(singleArticleQuery, 'http://localhost:8888/api');
+
+export async function getStaticPaths() {
+  let allArticlesQuery = `
+  {
+    entries(sectionId: 12) {
+    id
+    title
+    slug
+    postDate
+    ... on marketNews_default_Entry {
+      summaryText
+      richText
+    }
+  }
+}
+  `
+  let articles = await getEntries(allArticlesQuery, 'http://localhost:8888/api');
+//   let response = await fetch("http://localhost:8888/api", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       query: `
+//         {
+//   entries(sectionId: 12) {
+//     id
+//     title
+//     slug
+//     postDate
+//     ... on marketNews_default_Entry {
+//       summaryText
+//       richText
+//     }
+//   }
+// }
+//         `,
+//     }),
+//   });
+
+//   let articlesResponse = await response.json();
+//   let articles = articlesResponse.data.entries;
+  return articles.map((article) => {
+    return {
+      params: { slug: article.slug },
+      props: { article: article },
+    };
+  });
+}
+
+---
+<Layout title={article.title}>
+  <InteriorHeader />
+  <ArticleWrapper>
+    <NewsArticle
+      title={article.title}
+      summary={article.summaryText}
+      slug={article.slug}
+      postDate={article.postDate}
+      fullText={article.richText}
+      isEntry={true}
+    />
+    <p><a href="/news">Back to News</a></p>
+  </ArticleWrapper>
+
+</Layout>
