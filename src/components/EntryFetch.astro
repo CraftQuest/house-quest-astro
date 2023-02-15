@@ -1,6 +1,6 @@
 ---
 export async function getEntry(query: string) {
-    const url = import.meta.env.VITE_GRAPHQL_ENDPOINT;
+    const url = 'http://localhost:8888/api';
     const response = await fetch (url, {
     method: "POST",
     headers: {
