@@ -40,7 +40,7 @@ export async function getStaticPaths() {
 }
   `
   let articles = await getEntries(allArticlesQuery);
-  return articles.map((article) => {
+  return articles.map((article: { slug: any; }) => {
     return {
       params: { slug: article.slug },
       props: { article: article },

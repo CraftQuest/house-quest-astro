@@ -22,7 +22,7 @@ let newsArticles = await getEntries(query);
 		<p class="mt-3 text-xl text-gray-800 sm:mt-4">An expert view of what's happening in the local housing market.</p>
 	  </div>
 	  <div class="mt-6 grid gap-16 pt-12 lg:grid-cols-3 lg:gap-x-5 lg:gap-y-12">
-        {newsArticles.map((article) => {
+        {newsArticles.map((article: { title: string; summaryText: string | undefined; slug: string; }) => {
             return <NewsArticleMini title={article.title} summary={article.summaryText} slug={article.slug} />
         })}
 	  </div>
