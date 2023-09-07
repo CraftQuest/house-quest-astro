@@ -2,65 +2,75 @@
 import Layout from "../../layouts/Layout.astro";
 import ArticleWrapper from "../../layouts/ArticleWrapper.astro";
 import InteriorHeader from "../../components/InteriorHeader.astro";
-import NewsArticle from "../../components/NewsArticle.astro";
+// import NewsArticle from "../../components/NewsArticle.astro";
+import { getCollection } from 'astro:content';
+export async function getStaticPaths() {
+  const entries = await getCollection('news');
+  return entries.map(entry => ({
+      params: { slug: entry.slug },
+      props: { entry },
+  }));
+}
 
-import { getEntries } from "../../components/EntriesFetch.astro";
-import { getEntry } from "../../components/EntryFetch.astro";
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+// import { getEntries } from "../../components/EntriesFetch.astro";
+// import { getEntry } from "../../components/EntryFetch.astro";
 
 const { slug } = Astro.params;
-let singleArticleQuery = `
-        {
-  entry(sectionId: 12, slug: "${slug}") {
-    id
-    title
-    slug
-    ... on marketNews_default_Entry {
-      summaryText
-      richText
-    }
-  }
-}
-   `
+// let singleArticleQuery = `
+//         {
+//   entry(sectionId: 12, slug: "${slug}") {
+//     id
+//     title
+//     slug
+//     ... on marketNews_default_Entry {
+//       summaryText
+//       richText
+//     }
+//   }
+// }
+//    `
 
-let article = await getEntry(singleArticleQuery);
+// let article = await getEntry(singleArticleQuery);
 
-export async function getStaticPaths() {
-  let allArticlesQuery = `
-  {
-    entries(sectionId: 12) {
-    id
-    title
-    slug
-    postDate
-    ... on marketNews_default_Entry {
-      summaryText
-      richText
-    }
-  }
-}
-  `
-  let articles = await getEntries(allArticlesQuery);
-  return articles.map((article: { slug: any; }) => {
-    return {
-      params: { slug: article.slug },
-      props: { article: article },
-    };
-  });
-}
+// export async function getStaticPaths() {
+//   let allArticlesQuery = `
+//   {
+//     entries(sectionId: 12) {
+//     id
+//     title
+//     slug
+//     postDate
+//     ... on marketNews_default_Entry {
+//       summaryText
+//       richText
+//     }
+//   }
+// }
+//   `
+//   let articles = await getEntries(allArticlesQuery);
+//   return articles.map((article: { slug: any; }) => {
+//     return {
+//       params: { slug: article.slug },
+//       props: { article: article },
+//     };
+//   });
+// }
 
 ---
-<Layout title={article.title}>
+<Layout title={entry.data.title}>
   <InteriorHeader />
-  <ArticleWrapper>
-    <NewsArticle
-      title={article.title}
-      summary={article.summaryText}
-      slug={article.slug}
-      postDate={article.postDate}
-      fullText={article.richText}
-      isEntry={true}
-    />
-    <p><a href="/news">Back to News</a></p>
-  </ArticleWrapper>
-
+  <div class="bg-white" >
+    <div class="relative py-16 bg-tertiary overflow-hidden">
+        <div class="relative px-4 sm:px-6 lg:px-8">
+            <div class="mt-6 prose prose-slate prose-lg text-gray-500 mx-auto">
+              <h1 transition:animate="slide">{entry.data.title}</h1>
+              <h3>{entry.data.description}</h3>
+              <Content />
+              <p><a href="/news">Back to News</a></p>
+            </div>
+        </div>
+    </div>
+  </div>
 </Layout>

@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import MarketNews from '../components/MarketNews.astro'
+import BannerNotify from '../components/BannerNotify.svelte';
 import { getEntry } from "../components/EntryFetch.astro";
 let query = `
 {
@@ -16,8 +17,8 @@ let query = `
 let homepageContent = await getEntry(query);
 
 ---
-
 <Layout title="Welcome to Home Quest" description="In a competitive market, Olivia is the experienced real estate agent you want on your side.">
+	<BannerNotify client:only="svelte" />
 	<div class="bg-white">
 		<div class="max-w-full mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8 bg-primary shadow-2xl shadow-secondary border-opacity-50 border-b-8 border-secondary">
 		  <div class="text-center">

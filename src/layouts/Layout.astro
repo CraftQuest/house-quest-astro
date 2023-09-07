@@ -1,4 +1,5 @@
 ---
+import { ViewTransitions } from "astro:transitions";
 export interface Proper {
     title?: string,
     description?: string
@@ -17,6 +18,7 @@ const { title = 'House Quest', description = 'Get help finding a house in Austin
         <!-- <script type="module" src="/src/main.js"></script> -->
 
         <title>{title}</title>
+        <ViewTransitions />
     </head>
     <body>
         <slot />

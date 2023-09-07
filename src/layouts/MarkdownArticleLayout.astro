@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/Layout.astro'
+// import ArticleWrapper from '../layouts/ArticleWrapper.astro'
+import InteriorHeader from '../components/InteriorHeader.astro';
+import MarketNews from '../components/MarketNews.astro';
+
+const frontmatter = Astro.props.frontmatter;
+---
+
+<Layout>
+  <InteriorHeader />
+  <div class="bg-white">
+    <div class="relative py-16 bg-tertiary overflow-hidden">
+        <div class="relative px-4 sm:px-6 lg:px-8">
+            <div
+                class="mt-6 prose prose-slate prose-lg text-gray-500 mx-auto"
+            >
+            <h1>{frontmatter.title}</h1>
+            <h3>{frontmatter.description}</h3>
+                <slot/>
+            </div>
+        </div>
+    </div>
+</div>
+<MarketNews />
+  </Layout>
